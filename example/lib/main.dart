@@ -9,6 +9,8 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -23,7 +25,7 @@ class _MyAppState extends State<MyApp> {
 
     String token = getToken();
 
-    pusher = new PusherClient(
+    pusher = PusherClient(
       "app-key",
       PusherOptions(
         // if local on android use 10.0.2.2
@@ -31,9 +33,7 @@ class _MyAppState extends State<MyApp> {
         encrypted: false,
         auth: PusherAuth(
           'http://example.com/broadcasting/auth',
-          headers: {
-            'Authorization': 'Bearer $token',
-          },
+          headers: {'Authorization': 'Bearer $token'},
         ),
       ),
       enableLogging: true,
@@ -42,7 +42,9 @@ class _MyAppState extends State<MyApp> {
     channel = pusher.subscribe("private-orders");
 
     pusher.onConnectionStateChange((state) {
-      log("previousState: ${state?.previousState}, currentState: ${state?.currentState}");
+      log(
+        "previousState: ${state?.previousState}, currentState: ${state?.currentState}",
+      );
     });
 
     pusher.onConnectionError((error) {
@@ -54,7 +56,7 @@ class _MyAppState extends State<MyApp> {
     });
 
     channel.bind('order-filled', (event) {
-      log("Order Filled Event" + (event?.data.toString() ?? "No data"));
+      log("Order Filled Event${event?.data.toString() ?? "No data"}");
     });
   }
 
@@ -64,46 +66,47 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Example Pusher App'),
-        ),
+        appBar: AppBar(title: const Text('Example Pusher App')),
         body: Center(
-            child: Column(
-          children: [
-            ElevatedButton(
-              child: Text('Unsubscribe Private Orders'),
-              onPressed: () {
-                pusher.unsubscribe('private-orders');
-              },
-            ),
-            ElevatedButton(
-              child: Text('Unbind Status Update'),
-              onPressed: () {
-                channel.unbind('status-update');
-              },
-            ),
-            ElevatedButton(
-              child: Text('Unbind Order Filled'),
-              onPressed: () {
-                channel.unbind('order-filled');
-              },
-            ),
-            ElevatedButton(
-              child: Text('Bind Status Update'),
-              onPressed: () {
-                channel.bind('status-update', ( event) {
-                  log("Status Update Event" + (event?.data?.toString()??'No data'));
-                });
-              },
-            ),
-            ElevatedButton(
-              child: Text('Trigger Client Typing'),
-              onPressed: () {
-                channel.trigger('client-istyping', {'name': 'Bob'});
-              },
-            ),
-          ],
-        )),
+          child: Column(
+            children: [
+              ElevatedButton(
+                child: Text('Unsubscribe Private Orders'),
+                onPressed: () {
+                  pusher.unsubscribe('private-orders');
+                },
+              ),
+              ElevatedButton(
+                child: Text('Unbind Status Update'),
+                onPressed: () {
+                  channel.unbind('status-update');
+                },
+              ),
+              ElevatedButton(
+                child: Text('Unbind Order Filled'),
+                onPressed: () {
+                  channel.unbind('order-filled');
+                },
+              ),
+              ElevatedButton(
+                child: Text('Bind Status Update'),
+                onPressed: () {
+                  channel.bind('status-update', (event) {
+                    log(
+                      "Status Update Event${event?.data?.toString() ?? 'No data'}",
+                    );
+                  });
+                },
+              ),
+              ElevatedButton(
+                child: Text('Trigger Client Typing'),
+                onPressed: () {
+                  channel.trigger('client-istyping', {'name': 'Bob'});
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

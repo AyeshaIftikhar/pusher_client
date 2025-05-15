@@ -15,4 +15,8 @@ PusherAuth _$PusherAuthFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$PusherAuthToJson(PusherAuth instance) =>
-    <String, dynamic>{'endpoint': instance.endpoint, 'headers': instance.headers, 'params': instance.params};
+    <String, dynamic>{
+      'endpoint': instance.endpoint,
+      'headers': instance.headers,
+      'params': instance.params
+    };

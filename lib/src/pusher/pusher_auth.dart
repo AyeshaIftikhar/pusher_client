@@ -23,7 +23,8 @@ class PusherAuth {
     this.headers = const {'Content-Type': 'application/json'},
   });
 
-  factory PusherAuth.fromJson(Map<String, dynamic> json) => _$PusherAuthFromJson(json);
+  factory PusherAuth.fromJson(Map<String, dynamic> json) =>
+      _$PusherAuthFromJson(json);
 
   Map<String, dynamic> toJson() => _$PusherAuthToJson(this);
 }
